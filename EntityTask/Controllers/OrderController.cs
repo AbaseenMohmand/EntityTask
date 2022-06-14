@@ -25,13 +25,15 @@ namespace EntityTask.Controllers
             var joinList = (from order in _context.Orders
                             join OrderItem in _context.OrderItems on order.Id equals OrderItem.OrderId
                             join item in _context.Items on OrderItem.ItemId equals item.Id
+                            join itemunit in _context.ItemUnits on item.ItemUnit equals itemunit.Item.ItemUnit
                             select new Order
                             {
                                 Id = order.Id,
                                 OrderName = order.OrderName
 
 
-                            }).ToListAsync();
+                            }).OrderBy(a => (a.OrderItem.Select(a => a.Quanity * a.Item.Price).Sum()))
+                              .Reverse().ToListAsync();
 
 
 
