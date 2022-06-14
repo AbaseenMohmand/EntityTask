@@ -20,11 +20,21 @@ namespace EntityTask.Controllers
                               .Reverse().ToListAsync();
 
 
-           
+
+            //Joins 
+            var joinList = (from order in _context.Orders
+                            join OrderItem in _context.OrderItems on order.Id equals OrderItem.OrderId
+                            join item in _context.Items on OrderItem.ItemId equals item.Id
+                            select new Order
+                            {
+                                Id = order.Id,
+                                OrderName = order.OrderName
+
+
+                            }).ToListAsync();
 
 
 
-           
 
 
             return View(orderlist);
